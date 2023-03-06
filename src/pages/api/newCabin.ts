@@ -1,7 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import Cabin, { ICabin } from "../../../models/cabin";
+import { ICabin } from "@/interfaces/Cabin";
+
+import Cabin from "@/models/Cabin";
 
 //   name: { type: String, required: true },
 //   tv: { type: Boolean, required: true },

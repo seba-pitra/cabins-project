@@ -1,5 +1,5 @@
-import Cabin from "../../../models/cabin";
-import { connect } from "../../../utils/mongoose";
+import Cabin from "@/models/Cabin";
+import { connect } from "@/db/database";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
