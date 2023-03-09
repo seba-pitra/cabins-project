@@ -24,7 +24,17 @@ export default class ReviewService {
   async getAllReviews() {
     await connectMongoDb()
 
-    const foundReviews = await Review.find() 
+    const foundReviews: mongoose.Document< {}, IReview >[] = await Review.find() 
+
+    await disconnectMongoDb()
+
+    return foundReviews
+  }
+
+  async getReviewById(id: string) {
+    await connectMongoDb()
+
+    const foundReviews: mongoose.Document< {}, IReview >[] = await Review.find({ _id: id }) 
 
     await disconnectMongoDb()
 

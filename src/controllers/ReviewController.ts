@@ -1,3 +1,4 @@
+import { IReview } from "@/interfaces/Review";
 import ReviewService from "@/services/ReviewService";
 import mongoose from "mongoose";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -35,6 +36,20 @@ export default class ReviewController {
       res.status(200).json({ msg: "Reviews found", data: allReviews})
     } catch (err: any) {
       res.status(400).json({msg: err.message})
+    }
+  }
+
+  async getReviewById(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+    try {
+      const id = req.query.id as string
+
+      const foundReview: mongoose.Document< {}, IReview >[] = await this.reviewService.getReviewById(id)
+
+      if (!foundReview.length) throw new Error("No Review Found")
+
+      res.status(400).json({ msg: "Review found successfully", data: foundReview })
+    } catch (err: any) {
+      res.status(404).json({msg: err.message})
     }
   }
 
