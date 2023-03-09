@@ -1,7 +1,6 @@
-import { Schema, model } from "mongoose";
 import { Admin } from "@/interfaces/Admin";
+import { Schema, model } from "mongoose";
 
-//Schema to "Admin" entitie
 const adminSchema = new Schema<Admin>({
   email:    { type: String, required: true },
   type:     { type: String, required: true },
@@ -9,7 +8,6 @@ const adminSchema = new Schema<Admin>({
   password: { type: String, required: true }
 });
 
-// Create entitie in DB
 const Admin = model<Admin>('Admin', adminSchema);
 
 export default Admin;
