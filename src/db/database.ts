@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
-const database = mongoose
-  .connect("mongodb://localhost:27017/cabins")
-  .catch((e) => console.error(e));
+export const connect = async () => {
+  if (mongoose.connections[0].readyState) {
+    return;
+  }
 
-export default database;
+  return mongoose.connect(process.env.MONGO_URI!);
+};

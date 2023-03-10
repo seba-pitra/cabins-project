@@ -1,14 +1,22 @@
 //Interface to Schema
-export interface Cabin {
-  // Properties ordered by alphabetic order
-  amenities:  string;// - [amenities]  (o lo separamos en columnas para cada amenity/servicio con valor booleano, más fácil de renderizar)
-  capacity:   string;
-  description:string;
-  name:       string;
+export interface ICabin {
+  name: string;
+  tv: boolean;
+  bathroom: number;
+  room: number;
+  wifi: boolean;
+  bed: number;
+  parking: boolean;
+  pet_friendly: boolean;
+  heating: boolean;
+  air_conditioning: boolean;
+  capacity: number;
+  pictureURLs: string[];
+  description: string;
   price: {
-    autumn: number;
-    spring: number;
-    summer: number
     winter: number;
-  }
+    spring: number;
+    summer: number;
+    fall: number;
+  };
 }
