@@ -1,6 +1,6 @@
-import { IReview } from "@/interfaces/Review";
+import mongoose      from "mongoose";
 import ReviewService from "@/services/ReviewService";
-import mongoose from "mongoose";
+import { IReview }   from "@/interfaces/Review";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default class ReviewController {
@@ -10,7 +10,7 @@ export default class ReviewController {
     this.reviewService = reviewService
   }
 
-  async createReview(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  async createReview (req: NextApiRequest, res: NextApiResponse): Promise<void> {
     try {
       const { message, starsQuantity, title, visitorName } = req.body
   
@@ -27,7 +27,7 @@ export default class ReviewController {
     }
   }
   
-  async getReview(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  async getReview (req: NextApiRequest, res: NextApiResponse): Promise<void> {
     try {
       const allReviews: mongoose.Document[] = await this.reviewService.getAllReviews()
   
@@ -39,13 +39,14 @@ export default class ReviewController {
     }
   }
 
-  async getReviewById(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  async getReviewById (req: NextApiRequest, res: NextApiResponse): Promise<void> {
     try {
       const id = req.query.id as string
 
-      const foundReview: mongoose.Document< {}, IReview >[] = await this.reviewService.getReviewById(id)
+      const foundReview: mongoose.Document<unknown, {}, IReview> | null = 
+        await this.reviewService.getReviewById(id)
 
-      if (!foundReview.length) throw new Error("No Review Found")
+      if (!foundReview) throw new Error("No Review Found")
 
       res.status(400).json({ msg: "Review found successfully", data: foundReview })
     } catch (err: any) {
@@ -53,7 +54,28 @@ export default class ReviewController {
     }
   }
 
-  updateReview() {}
+  async updateReview  (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+    try {
+      const id = req.query.id as string
+      const { message, starsQuantity, title, visitorName } = req.body
+  
+      if (!message || !starsQuantity || !title || !visitorName) {
+        throw new Error("There are missing values")
+      }
+
+      const foundReview: mongoose.Document<unknown, {}, IReview> | null = 
+        await this.reviewService.getReviewById(id)
+
+      if(!foundReview) throw new Error("No Review found")
+
+      const updatedReview: mongoose.Document<unknown, {}, IReview> | null = 
+        await this.reviewService.updateReview({ id, message, starsQuantity, title, visitorName } )
+
+      res.status(200).json({msg: "update method created", data: updatedReview})
+    } catch (err: any) {
+      res.status(400).json({msg: err.message})
+    }
+  }
 
   deleteReview() {}
 };

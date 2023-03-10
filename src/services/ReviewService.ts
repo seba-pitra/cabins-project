@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import Review from "@/models/Review";
+import mongoose  from "mongoose";
+import Review    from "@/models/Review";
+import {IReview} from "@/interfaces/Review";
 import { connectMongoDb, disconnectMongoDb } from "@/db/database";
-import { IReview } from "@/interfaces/Review";
 
 export default class ReviewService {
   async createReview(params: IReview): Promise<mongoose.Document> {
@@ -21,27 +21,51 @@ export default class ReviewService {
     return newReview;
   }
 
-  async getAllReviews() {
-    await connectMongoDb()
+  async getAllReviews(): Promise<mongoose.Document<{}, IReview>[]> {
+      await connectMongoDb()
 
-    const foundReviews: mongoose.Document< {}, IReview >[] = await Review.find() 
+      const foundReviews: 
+        mongoose.Document< {}, IReview >[] = await Review.find() 
 
-    await disconnectMongoDb()
+      await disconnectMongoDb()
 
-    return foundReviews
+      return foundReviews
   }
 
-  async getReviewById(id: string) {
-    await connectMongoDb()
+  async getReviewById(id: string): 
+    Promise<mongoose.Document<unknown, {}, IReview> | null> {
+      await connectMongoDb()
 
-    const foundReviews: mongoose.Document< {}, IReview >[] = await Review.find({ _id: id }) 
+      const foundReviews : 
+        mongoose.Document<unknown, {}, IReview> | null = await Review.findOne({ _id: id }) 
 
-    await disconnectMongoDb()
+      await disconnectMongoDb()
 
-    return foundReviews
+      return foundReviews 
   }
 
-  updateReview() {}
+  async updateReview(newReviewData: IReview): 
+    Promise<mongoose.Document<unknown, {}, IReview> | null> {
+      const id = newReviewData.id as string;
 
-  deleteReview() {}
+      await connectMongoDb()
+
+      await Review.updateOne(
+        { _id: id },
+        {
+          $set: { ...newReviewData }
+        }
+      ) 
+
+      const updatedReview: 
+        mongoose.Document<unknown, {}, IReview> | null = await this.getReviewById(id)
+
+      await disconnectMongoDb()
+
+      return updatedReview;
+  }
+
+  deleteReview() {
+
+  }
 };
