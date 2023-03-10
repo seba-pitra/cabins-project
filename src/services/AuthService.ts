@@ -2,16 +2,13 @@ import User from '@/models/User';
 import { IUser } from '../interfaces/User';
 
 export default class AuthService {
-  constructor() {}
-
-  async findUser(email: string) {
-    const user = await User.findOne({ email });
-    console.log(user);
+  async findUser(email: string): Promise<IUser | null> {
+    const user: IUser | null = await User.findOne({ email });
     return user;
   }
 
-  createUser(user: IUser) {
-    const newUser = new User(User);
+  createUser(user: IUser): IUser {
+    const newUser: IUser = new User(user);
     return newUser;
   }
 }

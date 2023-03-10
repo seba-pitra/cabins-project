@@ -1,9 +1,17 @@
-import { db } from '@/db';
-import { generateJWT } from '@/helpers/jwt';
-import AuthService from '@/services/AuthService';
 import bcrypt from 'bcryptjs';
-
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { db } from '@/db';
+import AuthService from '@/services/AuthService';
+import { IUser, IUserResponse } from '../interfaces/User';
+
+import { generateJWT } from '@/helpers/jwt';
+
+type Data =
+  | {
+      error: boolean;
+      message: string;
+    }
+  | IUserResponse;
 
 export default class AuthController {
   private authService: AuthService;
@@ -12,18 +20,18 @@ export default class AuthController {
     this.authService = authService;
   }
 
-  async createUser(req: NextApiRequest, res: NextApiResponse) {
+  async createUser(req: NextApiRequest, res: NextApiResponse<Data>) {
     const { email, password } = req.body;
 
     await db.connect();
 
     try {
-      let user = await this.authService.findUser(email);
+      let user: IUser | null = await this.authService.findUser(email);
 
       if (user) {
         await db.disconnect();
         return res.status(400).json({
-          ok: false,
+          error: true,
           message: 'A user exists with that email',
         });
       }
@@ -36,30 +44,31 @@ export default class AuthController {
       await user.save();
       await db.disconnect();
 
-      const token = await generateJWT(user.id, user.fullname);
+      const token: string = await generateJWT(user.id, user.fullname);
 
       return res.status(201).json({
-        ok: true,
+        error: false,
         uid: user.id,
-        name: user.fullname,
+        fullname: user.fullname,
         token,
       });
     } catch (error) {
+      console.error(error);
       await db.disconnect();
       return res.status(500).json({
-        ok: false,
-        msg: 'Please talk to the administrator ' + error,
+        error: true,
+        message: 'Please talk to the administrator ' + error,
       });
     }
   }
 
-  async loginUser(req: NextApiRequest, res: NextApiResponse) {
+  async loginUser(req: NextApiRequest, res: NextApiResponse<Data>) {
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
-        ok: false,
-        msg: 'Please provide a valid email and password',
+        error: true,
+        message: 'Please provide a valid email and password',
       });
     }
 
@@ -67,8 +76,8 @@ export default class AuthController {
       const user = await this.authService.findUser(email);
       if (!user) {
         return res.status(401).json({
-          ok: false,
-          msg: 'Email or password are not correct',
+          error: true,
+          message: 'Email or password are not correct',
         });
       }
 
@@ -76,15 +85,15 @@ export default class AuthController {
 
       if (!validatedPassword) {
         return res.status(401).json({
-          ok: false,
-          msg: 'Incorrect password',
+          error: true,
+          message: 'Incorrect password',
         });
       }
 
       const token = await generateJWT(user.id, user.fullname);
 
       res.status(200).json({
-        ok: true,
+        error: false,
         uid: user.id,
         fullname: user.fullname,
         token,
@@ -92,8 +101,8 @@ export default class AuthController {
     } catch (error) {
       console.error(error);
       res.status(500).json({
-        ok: false,
-        msg: 'Please talk to the administrator',
+        error: true,
+        message: 'Please talk to the administrator',
       });
     }
   }
