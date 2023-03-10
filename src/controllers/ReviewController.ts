@@ -71,7 +71,7 @@ export default class ReviewController {
       const updatedReview: mongoose.Document<unknown, {}, IReview> | null = 
         await this.reviewService.updateReview({ id, message, starsQuantity, title, visitorName } )
 
-      res.status(200).json({msg: "update method created", data: updatedReview})
+      res.status(200).json({msg: "Review updated successfuly", data: updatedReview})
     } catch (err: any) {
       res.status(400).json({msg: err.message})
     }
