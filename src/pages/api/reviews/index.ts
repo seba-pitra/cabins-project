@@ -6,12 +6,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 const reviewService = new ReviewService()
 const reviewController = new ReviewController(reviewService)
 
-const post = async (req: NextApiRequest, res: NextApiResponse) => {
-  return await reviewController.createReview(req, res)
+const post = (req: NextApiRequest, res: NextApiResponse) => {
+  return reviewController.createReview(req, res)
 }
 
-const get = async (req: NextApiRequest, res: NextApiResponse) => {
-  return await reviewController.getAllReviews(req, res)
+const get =(req: NextApiRequest, res: NextApiResponse) => {
+  return reviewController.getAllReviews(req, res)
 }
 
 export default methods({ post, get });

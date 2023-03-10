@@ -6,16 +6,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 const reviewService = new ReviewService()
 const reviewController = new ReviewController(reviewService)
 
-const get = async (req: NextApiRequest, res: NextApiResponse) => {
-  return await reviewController.getReviewById(req, res)
+const get = (req: NextApiRequest, res: NextApiResponse) => {
+  return reviewController.getReviewById(req, res)
 }
 
-const put = async (req: NextApiRequest, res: NextApiResponse) => {
-  return await reviewController.updateReview(req, res)
+const put = (req: NextApiRequest, res: NextApiResponse) => {
+  return reviewController.updateReview(req, res)
 }
 
-const deleteMethod = async (req: NextApiRequest, res: NextApiResponse) => {
-  return await reviewController.deleteReview(req, res)
+const deleteMethod = (req: NextApiRequest, res: NextApiResponse) => {
+  return reviewController.deleteReview(req, res)
 }
 
 export default methods({
