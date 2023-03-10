@@ -1,9 +1,7 @@
-import Head from 'next/head';
-import { Inter } from 'next/font/google';
-import styles from '@/styles/Home.module.css';
-import { Contact } from '../components/Contact';
-
-const inter = Inter({ subsets: ['latin'] });
+import { Contact }    from '../components/Contact';
+import Head           from 'next/head';
+import { ReviewForm } from '@/components/ReviewForm';
+import styles         from '@/styles/Home.module.css';
 
 export default function Home() {
   return (
@@ -15,8 +13,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className='grid justify-center'>
-        <main className={styles.main}>HELLO!!!</main>
-        <Contact />
+        <main className={styles.main}>
+          <Contact />
+          {/* <ReviewForm /> */}
+        </main>
       </div>
     </>
   );
