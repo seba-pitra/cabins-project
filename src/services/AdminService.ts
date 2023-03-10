@@ -4,4 +4,4 @@ export default class AdminService {
   getAdminData() {}
 
   updateAdminData() {}
-};
+}
