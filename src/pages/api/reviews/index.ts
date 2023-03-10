@@ -1,19 +1,17 @@
+import methods          from "micro-method-router"
 import ReviewService    from "@/services/ReviewService";
 import ReviewController from "@/controllers/ReviewController";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const reviewService = new ReviewService()
-  const reviewController = new ReviewController(reviewService)
+const reviewService = new ReviewService()
+const reviewController = new ReviewController(reviewService)
 
-  switch(req.method) {
-    case "POST":
-      await reviewController.createReview(req, res)
-    case "GET":
-      await reviewController.getAllReviews(req, res)
-    default:
-      return;
-  }
+const post = async (req: NextApiRequest, res: NextApiResponse) => {
+  return await reviewController.createReview(req, res)
 }
 
-export default handler;
+const get = async (req: NextApiRequest, res: NextApiResponse) => {
+  return await reviewController.getAllReviews(req, res)
+}
+
+export default methods({ post, get });
