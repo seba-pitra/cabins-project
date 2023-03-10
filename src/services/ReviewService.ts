@@ -65,7 +65,7 @@ export default class ReviewService {
       return updatedReview;
   }
 
-  async deleteReview(id: string) {
+  async deleteReview(id: string): Promise<void> {
     try {
       await connectMongoDb()
     
