@@ -11,11 +11,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await reviewController.getReviewById(req, res)
     case "PUT":
       await reviewController.updateReview(req, res)
+    case "DELETE":
+      await reviewController.deleteReview(req, res)
     default:
       return;
   }
 }
 
 export default handler;
-
-// id: 640a3ef57c21ea8ca07f2af9

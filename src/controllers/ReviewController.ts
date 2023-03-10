@@ -27,7 +27,7 @@ export default class ReviewController {
     }
   }
   
-  async getReview (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  async getAllReviews (req: NextApiRequest, res: NextApiResponse): Promise<void> {
     try {
       const allReviews: mongoose.Document[] = await this.reviewService.getAllReviews()
   
@@ -54,7 +54,7 @@ export default class ReviewController {
     }
   }
 
-  async updateReview  (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  async updateReview (req: NextApiRequest, res: NextApiResponse): Promise<void> {
     try {
       const id = req.query.id as string
       const { message, starsQuantity, title, visitorName } = req.body
@@ -77,5 +77,20 @@ export default class ReviewController {
     }
   }
 
-  deleteReview() {}
+  async deleteReview (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+    try {
+      const id = req.query.id as string
+
+      const foundReview: mongoose.Document<unknown, {}, IReview> | null = 
+        await this.reviewService.getReviewById(id)
+
+      if(!foundReview) throw new Error("No Review found")
+
+      await this.reviewService.deleteReview(id)
+
+      res.status(400).json({ msg: "Deleted successfully" })
+    } catch (err:any) {
+      res.status(400).json({ msg: err.message })
+    }
+  }
 };

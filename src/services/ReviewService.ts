@@ -65,7 +65,15 @@ export default class ReviewService {
       return updatedReview;
   }
 
-  deleteReview() {
-
+  async deleteReview(id: string) {
+    try {
+      await connectMongoDb()
+    
+      await Review.deleteOne({ _id: id })
+  
+      await disconnectMongoDb()
+    } catch (err) {
+      throw new Error("Failed to deleted review")
+    }
   }
 };
