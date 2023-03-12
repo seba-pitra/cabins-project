@@ -108,8 +108,7 @@ export const Contact = () => {
           </div>
 
           <DateRangePicker
-            onChange={(item) => setDateRange(item.selection)}
-            showSelectionPreview={true}
+            onChange={(item) => setDateRange(item.selection as any)}
             moveRangeOnFirstSelection={false}
             ranges={[dateRange]}
             minDate={new Date()}

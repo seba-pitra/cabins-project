@@ -129,7 +129,7 @@ export default class AuthController {
         to: email,
         from: 'ayrtonjuarez90@gmail.com',
         subject: 'Asunto del correo electrónico',
-        html: `<p>Cuerpo del correo electrónico en formato HTML ${token} </p>`,
+        html: `<p>Cuerpo del correo electrónico en formato HTML http://localhost:3000/recovery?token=${token} </p>`,
       };
 
       await sendEmail(msg);
