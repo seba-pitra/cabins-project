@@ -5,6 +5,7 @@ import AuthService from '@/services/AuthService';
 import { IUser, IUserResponse } from '../interfaces/User';
 
 import { generateJWT } from '@/helpers/jwt';
+import { sendEmail } from '@/libs/sendgrid';
 
 type Data =
   | {
@@ -100,6 +101,48 @@ export default class AuthController {
       });
     } catch (error) {
       console.error(error);
+      res.status(500).json({
+        error: true,
+        message: 'Please talk to the administrator',
+      });
+    }
+  }
+
+  async recoveryPassword(req: NextApiRequest, res: NextApiResponse<Data>) {
+    const { email } = req.body;
+
+    await db.connect();
+
+    try {
+      const user = await this.authService.findUser(email);
+
+      if (!user) {
+        return res.status(401).json({
+          error: true,
+          message: 'No existe un usuario registrado con el email provisto',
+        });
+      }
+
+      const token = await generateJWT(user.id, user.fullname);
+
+      const msg = {
+        to: email,
+        from: 'ayrtonjuarez90@gmail.com',
+        subject: 'Asunto del correo electrónico',
+        html: `<p>Cuerpo del correo electrónico en formato HTML ${token} </p>`,
+      };
+
+      await sendEmail(msg);
+      await db.disconnect();
+
+      return res.status(201).json({
+        error: false,
+        message: 'Mail enviado con exito',
+      });
+    } catch (error) {
+      console.error(error);
+      await db.connect();
+
       res.status(500).json({
         error: true,
         message: 'Please talk to the administrator',
