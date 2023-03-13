@@ -1,6 +1,7 @@
 import { Contact }    from '../components/Contact';
 import Head           from 'next/head';
-import { ReviewForm } from '@/components/ReviewForm';
+import { Reviews }    from '@/components/ReviewsComponents/Reviews';
+import { ReviewForm } from '@/components/ReviewsComponents/ReviewForm';
 import styles         from '@/styles/Home.module.css';
 
 export default function Home() {
@@ -14,8 +15,10 @@ export default function Home() {
       </Head>
       <div className='grid justify-center'>
         <main className={styles.main}>
-          <Contact />
+          {/* Hello World! */}
+          {/* <Contact /> */}
           {/* <ReviewForm /> */}
+          <Reviews />
         </main>
       </div>
     </>
