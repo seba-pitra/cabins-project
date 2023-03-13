@@ -56,7 +56,7 @@ export default class ReviewController {
 
   async updateReview (req: NextApiRequest, res: NextApiResponse): Promise<void> {
     try {
-      const id = req.query.id as string
+      const _id = req.query.id as string
       const { message, starsQuantity, title, visitorName } = req.body
   
       if (!message || !starsQuantity || !title || !visitorName) {
@@ -64,12 +64,12 @@ export default class ReviewController {
       }
 
       const foundReview: mongoose.Document<unknown, {}, IReview> | null = 
-        await this.reviewService.getReviewById(id)
+        await this.reviewService.getReviewById(_id)
 
       if(!foundReview) throw new Error("No Review found")
 
       const updatedReview: mongoose.Document<unknown, {}, IReview> | null = 
-        await this.reviewService.updateReview({ id, message, starsQuantity, title, visitorName } )
+        await this.reviewService.updateReview({ _id, message, starsQuantity, title, visitorName } )
 
       res.status(200).json({msg: "Review updated successfuly", data: updatedReview})
     } catch (err: any) {

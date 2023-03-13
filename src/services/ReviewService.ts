@@ -46,19 +46,19 @@ export default class ReviewService {
 
   async updateReview(newReviewData: IReview): 
     Promise<mongoose.Document<unknown, {}, IReview> | null> {
-      const id = newReviewData.id as string;
+      const _id = newReviewData._id as string;
 
       await connectMongoDb()
 
       await Review.updateOne(
-        { _id: id },
+        { _id: _id },
         {
           $set: { ...newReviewData }
         }
       ) 
 
       const updatedReview: 
-        mongoose.Document<unknown, {}, IReview> | null = await this.getReviewById(id)
+        mongoose.Document<unknown, {}, IReview> | null = await this.getReviewById(_id)
 
       await disconnectMongoDb()
 
