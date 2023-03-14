@@ -1,4 +1,5 @@
 import { IReview } from "@/interfaces/Review";
+import Rating      from '@mui/material/Rating';
 
 export const ReviewCard = (props: IReview) => {
   return (
@@ -9,7 +10,7 @@ export const ReviewCard = (props: IReview) => {
           {props.title}
         </strong>
         <p>
-          {props.starsQuantity}
+        <Rating name="read-only" value={props.starsQuantity} readOnly />
         </p>
       </div>
 
